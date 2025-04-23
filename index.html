@@ -5,21 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ارتباط با هورزاد</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap');
+
     body {
       margin: 0;
       font-family: 'Vazirmatn', sans-serif;
       background-color: #042721;
       color: #c8a257;
       overflow-x: hidden;
-      position: relative;
     }
 
-    canvas#particles {
+    /* پیام خوش‌آمد */
+    #welcome-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 0;
-      pointer-events: none;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #c8a257;
+      font-size: 1.8rem;
+      cursor: pointer;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    #welcome-overlay:hover {
+      text-shadow: 0 0 15px #c8a257;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
     }
 
     .parallax {
@@ -29,7 +47,7 @@
       justify-content: center;
       align-items: center;
       position: relative;
-      z-index: 1;
+      overflow: hidden;
     }
 
     .logo {
@@ -37,6 +55,7 @@
       margin-bottom: 2rem;
       mix-blend-mode: screen;
       transition: all 0.3s ease-in-out;
+      z-index: 2;
     }
 
     .logo:hover {
@@ -77,6 +96,13 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
       z-index: 0;
     }
 
@@ -85,8 +111,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 1;
-      position: relative;
+      padding-top: 60px;
     }
 
     #info-box {
@@ -98,13 +123,13 @@
       max-width: 600px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 0 30px rgba(200,162,87,0.4);
-      transition: all 0.3s ease;
+      box-shadow: 0 0 25px rgba(200,162,87, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     #info-box:hover {
-      transform: rotateX(3deg) rotateY(-3deg) scale(1.02);
-      box-shadow: 0 0 50px rgba(200,162,87,0.6);
+      transform: rotateX(3deg) rotateY(-3deg) scale(1.01);
+      box-shadow: 0 0 45px rgba(200,162,87, 0.6);
     }
 
     #info-box a {
@@ -116,18 +141,27 @@
   </style>
 </head>
 <body>
-  <canvas id="particles"></canvas>
+  <!-- پیام خوش‌آمد -->
+  <div id="welcome-overlay" onclick="startExperience()">
+    خوش آمدید - برای ادامه کلیک کنید
+  </div>
 
+  <!-- موزیک -->
+  <audio id="bg-music" loop>
+    <source src="https://codoseo.net/mag/wp-content/uploads/2021/07/bensound-sadday.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- صفحه لوگو -->
   <section class="parallax">
+    <div id="particles-js"></div>
     <div class="halo"></div>
     <img src="logo.png" alt="لوگو هورزاد" class="logo" />
-
-    <!-- آیکون اسکرول SVG -->
     <svg onclick="handleScrollClick()" class="scroll-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#c8a257" viewBox="0 0 24 24">
       <path d="M12 16.5l-6-6h12l-6 6z"/>
     </svg>
   </section>
 
+  <!-- باکس مشخصات -->
   <section id="info-section">
     <div id="info-box">
       <h2>ارتباط با هورزاد</h2>
@@ -138,82 +172,55 @@
     </div>
   </section>
 
-  <!-- موسیقی پس‌زمینه -->
-  <audio id="bg-music" loop>
-    <source src="https://codoseo.net/mag/wp-content/uploads/2021/07/bensound-sadday.mp3" type="audio/mp3">
-  </audio>
-
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    // فعال‌سازی موسیقی با اولین کلیک
-    window.addEventListener('DOMContentLoaded', () => {
-      const audio = document.getElementById('bg-music');
-      document.body.addEventListener('click', () => {
-        audio.play().catch(() => {});
-      }, { once: true });
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 70
+        },
+        "color": {
+          "value": "#c8a257"
+        },
+        "shape": {
+          "type": "circle"
+        },
+        "opacity": {
+          "value": 0.5
+        },
+        "size": {
+          "value": 3
+        },
+        "line_linked": {
+          "enable": false
+        },
+        "move": {
+          "enable": true,
+          "speed": 1
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": { "enable": true, "mode": "repulse" }
+        }
+      },
+      "retina_detect": true
     });
 
-    // اسکرول به بخش دوم
     function handleScrollClick() {
+      const box = document.getElementById('info-box');
       const section = document.getElementById('info-section');
-      section.scrollIntoView({ behavior: 'smooth' });
+      const boxTop = section.offsetTop;
+      window.scrollTo({ top: boxTop, behavior: 'smooth' });
     }
 
-    // افکت ذرات طلایی
-    const canvas = document.getElementById("particles");
-    const ctx = canvas.getContext("2d");
-    let particlesArray = [];
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 1;
-        this.speedX = Math.random() * 0.5 - 0.25;
-        this.speedY = Math.random() * 0.5 - 0.25;
-      }
-
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-      }
-
-      draw() {
-        ctx.fillStyle = "#c8a257";
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
+    function startExperience() {
+      document.getElementById('welcome-overlay').style.display = 'none';
+      const music = document.getElementById('bg-music');
+      music.play().catch(err => console.log("موزیک پخش نشد:", err));
     }
-
-    function initParticles() {
-      particlesArray = [];
-      for (let i = 0; i < 150; i++) {
-        particlesArray.push(new Particle());
-      }
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let particle of particlesArray) {
-        particle.update();
-        particle.draw();
-      }
-      requestAnimationFrame(animateParticles);
-    }
-
-    initParticles();
-    animateParticles();
   </script>
 </body>
 </html>
