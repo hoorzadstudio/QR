@@ -11,6 +11,7 @@
       background-color: #042721;
       color: #c8a257;
       overflow-x: hidden;
+      position: relative;
     }
 
     .parallax {
@@ -20,6 +21,7 @@
       justify-content: center;
       align-items: center;
       position: relative;
+      z-index: 2;
     }
 
     .logo {
@@ -76,6 +78,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      z-index: 2;
     }
 
     #info-box {
@@ -105,9 +108,10 @@
   </style>
 </head>
 <body>
+  <div id="particles-js"></div>
   <section class="parallax">
     <div class="halo"></div>
-    <img src="logo.png" alt="لوگو هورزاد" class="logo" />
+    <img src="assets/logo.png" alt="لوگو هورزاد" class="logo" />
     
     <!-- آیکون اسکرول SVG با کلیک -->
     <svg onclick="handleScrollClick()" class="scroll-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#c8a257" viewBox="0 0 24 24">
@@ -131,10 +135,67 @@
 
   <!-- موسیقی پس‌زمینه -->
   <audio id="backgroundMusic" loop autoplay>
-    <source src="https://codoseo.net/mag/wp-content/uploads/2021/07/bensound-sadday.mp3" type="audio/mp3">
+    <source src="https://www.bensound.com/bensound-music/bensound-summer.mp3" type="audio/mp3">
   </audio>
 
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.39.2/tsparticles.bundle.min.js"></script>
   <script>
+    // پارتیکل سیستم برای ذرات طلایی
+    tsParticles.load("particles-js", {
+      particles: {
+        number: {
+          value: 50,
+          density: {
+            enable: true,
+            value_area: 800
+          }
+        },
+        color: {
+          value: "#c8a257"
+        },
+        shape: {
+          type: "circle",
+        },
+        opacity: {
+          value: 0.5,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 1,
+            opacity_min: 0,
+            sync: false
+          }
+        },
+        size: {
+          value: 4,
+          random: true,
+          anim: {
+            enable: true,
+            speed: 2,
+            size_min: 0.1,
+            sync: false
+          }
+        },
+        move: {
+          enable: true,
+          speed: 3,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false
+        }
+      },
+      interactivity: {
+        events: {
+          onhover: {
+            enable: true,
+            mode: "repulse"
+          }
+        }
+      }
+    });
+
     // پخش صدا بعد از تعامل مستقیم
     let audio = document.getElementById('clickSound');
     
