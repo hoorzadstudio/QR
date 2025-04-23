@@ -32,6 +32,7 @@
       cursor: pointer;
       width: 40px;
       animation: bounce 2s infinite;
+      z-index: 10;
     }
 
     @keyframes bounce {
@@ -76,7 +77,6 @@
       display: block;
       margin: 0.5rem 0;
     }
-
   </style>
 </head>
 <body>
@@ -100,7 +100,13 @@
 
   <script>
     function scrollToInfo() {
-      document.getElementById('info-section').scrollIntoView({ behavior: 'smooth' });
+      const infoSection = document.getElementById('info-section');
+      const offset = infoSection.offsetTop;
+      const sectionHeight = infoSection.clientHeight;
+      const windowHeight = window.innerHeight;
+      const scrollPosition = offset + (sectionHeight / 2) - (windowHeight / 2);
+
+      window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
     }
   </script>
 </body>
