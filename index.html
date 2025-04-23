@@ -140,26 +140,23 @@
 
   <!-- موسیقی پس‌زمینه -->
   <audio id="bg-music" loop>
-    <source src="https://cdn.pixabay.com/audio/2023/03/16/audio_2cbf2286e0.mp3" type="audio/mp3">
+    <source src="https://codoseo.net/mag/wp-content/uploads/2021/07/bensound-sadday.mp3" type="audio/mp3">
   </audio>
 
   <script>
-    function handleScrollClick() {
-      const box = document.getElementById('info-box');
-      const section = document.getElementById('info-section');
-      const boxTop = box.offsetTop;
-      const boxHeight = box.offsetHeight;
-      const windowHeight = window.innerHeight;
-      const scrollPos = boxTop - (windowHeight / 2) + (boxHeight / 2);
-      window.scrollTo({ top: scrollPos, behavior: 'smooth' });
-    }
-
+    // فعال‌سازی موسیقی با اولین کلیک
     window.addEventListener('DOMContentLoaded', () => {
       const audio = document.getElementById('bg-music');
       document.body.addEventListener('click', () => {
         audio.play().catch(() => {});
       }, { once: true });
     });
+
+    // اسکرول به بخش دوم
+    function handleScrollClick() {
+      const section = document.getElementById('info-section');
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
 
     // افکت ذرات طلایی
     const canvas = document.getElementById("particles");
