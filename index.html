@@ -14,6 +14,14 @@
       position: relative;
     }
 
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     .parallax {
       height: 100vh;
       display: flex;
@@ -21,7 +29,7 @@
       justify-content: center;
       align-items: center;
       position: relative;
-      z-index: 2;
+      z-index: 1;
     }
 
     .logo {
@@ -70,7 +78,6 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 0;
-      pointer-events: none;
     }
 
     #info-section {
@@ -78,7 +85,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 2;
+      z-index: 1;
+      position: relative;
     }
 
     #info-box {
@@ -90,13 +98,13 @@
       max-width: 600px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 0 20px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 30px rgba(200,162,87,0.4);
+      transition: all 0.3s ease;
     }
 
     #info-box:hover {
-      transform: rotateX(3deg) rotateY(-3deg) scale(1.01);
-      box-shadow: 0 12px 30px rgba(200,162,87,0.3);
+      transform: rotateX(3deg) rotateY(-3deg) scale(1.02);
+      box-shadow: 0 0 50px rgba(200,162,87,0.6);
     }
 
     #info-box a {
@@ -108,12 +116,13 @@
   </style>
 </head>
 <body>
-  <div id="particles-js"></div>
+  <canvas id="particles"></canvas>
+
   <section class="parallax">
     <div class="halo"></div>
     <img src="logo.png" alt="لوگو هورزاد" class="logo" />
-    
-    <!-- آیکون اسکرول SVG با کلیک -->
+
+    <!-- آیکون اسکرول SVG -->
     <svg onclick="handleScrollClick()" class="scroll-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#c8a257" viewBox="0 0 24 24">
       <path d="M12 16.5l-6-6h12l-6 6z"/>
     </svg>
@@ -129,76 +138,12 @@
     </div>
   </section>
 
-  <audio id="clickSound" preload="auto">
-    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_643be61e15.mp3" type="audio/mp3">
-  </audio>
-
   <!-- موسیقی پس‌زمینه -->
-  <audio id="backgroundMusic" loop autoplay>
-    <source src="https://www.bensound.com/bensound-music/bensound-summer.mp3" type="audio/mp3">
+  <audio id="bg-music" loop>
+    <source src="https://cdn.pixabay.com/audio/2023/03/16/audio_2cbf2286e0.mp3" type="audio/mp3">
   </audio>
 
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@1.39.2/tsparticles.bundle.min.js"></script>
   <script>
-    // پارتیکل سیستم برای ذرات طلایی
-    tsParticles.load("particles-js", {
-      particles: {
-        number: {
-          value: 50,
-          density: {
-            enable: true,
-            value_area: 800
-          }
-        },
-        color: {
-          value: "#c8a257"
-        },
-        shape: {
-          type: "circle",
-        },
-        opacity: {
-          value: 0.5,
-          random: true,
-          anim: {
-            enable: true,
-            speed: 1,
-            opacity_min: 0,
-            sync: false
-          }
-        },
-        size: {
-          value: 4,
-          random: true,
-          anim: {
-            enable: true,
-            speed: 2,
-            size_min: 0.1,
-            sync: false
-          }
-        },
-        move: {
-          enable: true,
-          speed: 3,
-          direction: "none",
-          random: true,
-          straight: false,
-          out_mode: "out",
-          bounce: false
-        }
-      },
-      interactivity: {
-        events: {
-          onhover: {
-            enable: true,
-            mode: "repulse"
-          }
-        }
-      }
-    });
-
-    // پخش صدا بعد از تعامل مستقیم
-    let audio = document.getElementById('clickSound');
-    
     function handleScrollClick() {
       const box = document.getElementById('info-box');
       const section = document.getElementById('info-section');
@@ -206,22 +151,72 @@
       const boxHeight = box.offsetHeight;
       const windowHeight = window.innerHeight;
       const scrollPos = boxTop - (windowHeight / 2) + (boxHeight / 2);
-
       window.scrollTo({ top: scrollPos, behavior: 'smooth' });
-
-      audio.currentTime = 0;
-      audio.play().catch(e => {
-        console.log('صدا بدون تعامل مستقیم پخش نشد.');
-      });
     }
 
-    // اجرای موسیقی زمینه خودکار هنگام بارگذاری صفحه
-    window.addEventListener('load', function() {
-      let backgroundMusic = document.getElementById('backgroundMusic');
-      backgroundMusic.play().catch(e => {
-        console.log('موسیقی به دلیل محدودیت مرورگر پخش نشد.');
-      });
+    window.addEventListener('DOMContentLoaded', () => {
+      const audio = document.getElementById('bg-music');
+      document.body.addEventListener('click', () => {
+        audio.play().catch(() => {});
+      }, { once: true });
     });
+
+    // افکت ذرات طلایی
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    let particlesArray = [];
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.fillStyle = "#c8a257";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particlesArray = [];
+      for (let i = 0; i < 150; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let particle of particlesArray) {
+        particle.update();
+        particle.draw();
+      }
+      requestAnimationFrame(animateParticles);
+    }
+
+    initParticles();
+    animateParticles();
   </script>
 </body>
 </html>
