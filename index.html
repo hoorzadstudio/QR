@@ -1,134 +1,107 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ارتباط با هورزاد</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
-
-    body, html {
+    body {
       margin: 0;
-      padding: 0;
       font-family: 'Vazirmatn', sans-serif;
       background-color: #042721;
       color: #c8a257;
-      scroll-behavior: smooth;
       overflow-x: hidden;
     }
 
-    .parallax-container {
-      position: relative;
+    .parallax {
       height: 100vh;
-      background-color: #042721;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      position: relative;
     }
 
     .logo {
       width: 180px;
-      position: relative;
-      z-index: 2;
-      filter: drop-shadow(0 0 40px #c8a257aa);
+      margin-bottom: 2rem;
+      mix-blend-mode: screen;
     }
 
-    .scroll-indicator {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
+    .scroll-icon {
       cursor: pointer;
-      z-index: 2;
+      width: 40px;
       animation: bounce 2s infinite;
     }
 
-    .scroll-indicator svg {
-      width: 32px;
-      height: 32px;
-      fill: #c8a257;
-    }
-
     @keyframes bounce {
-      0%, 100% { transform: translate(-50%, 0); }
-      50% { transform: translate(-50%, 10px); }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
     }
 
     .halo {
       position: absolute;
       width: 300px;
       height: 300px;
-      background: radial-gradient(circle, #c8a25733, transparent 80%);
+      background: radial-gradient(circle, rgba(200,162,87,0.2) 0%, transparent 70%);
+      border-radius: 50%;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 1;
-      border-radius: 50%;
-      filter: blur(30px);
+      z-index: 0;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
+    #info-section {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 250px; /* این بخش اضافه شد */
+    }
+
+    #info-box {
       padding: 2rem;
-      margin: 3rem auto;
-      max-width: 400px;
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      animation: fadeIn 1.5s ease-out;
-    }
-
-    .card h1 {
-      margin-bottom: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
       color: #c8a257;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
     }
 
-    .card p {
-      margin: 0.8rem 0;
-      direction: rtl;
-      font-size: 1rem;
+    #info-box a {
+      color: #c8a257;
+      text-decoration: none;
+      display: block;
+      margin: 0.5rem 0;
     }
 
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(30px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
   </style>
 </head>
 <body>
-
-  <!-- پارالاکس -->
-  <div class="parallax-container">
-    <img src="logo.png" alt="لوگو هورزاد" class="logo">
+  <section class="parallax">
     <div class="halo"></div>
-    <div class="scroll-indicator" onclick="document.getElementById('infoCard').scrollIntoView({behavior: 'smooth'})">
-      <svg viewBox="0 0 24 24">
-        <path d="M12 16.5l-6-6h12l-6 6z"/>
-      </svg>
-    </div>
-  </div>
+    <img src="assets/logo.png" alt="لوگو هورزاد" class="logo" />
+    <svg onclick="scrollToInfo()" class="scroll-icon" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48" fill="#c8a257">
+      <path d="M480 768 240 528l56-56 184 184 184-184 56 56-240 240Z"/>
+    </svg>
+  </section>
 
-  <!-- اطلاعات تماس -->
-  <div class="card" id="infoCard">
-    <h1>ارتباط با هورزاد</h1>
-    <p id="phone">📞 شماره تماس: در حال بارگذاری...</p>
-    <p id="instagram">📷 اینستاگرام: در حال بارگذاری...</p>
-    <p id="whatsapp">💬 واتساپ: در حال بارگذاری...</p>
-    <p id="address">📍 آدرس: در حال بارگذاری...</p>
-  </div>
+  <section id="info-section">
+    <div id="info-box">
+      <h2>ارتباط با هورزاد</h2>
+      <a href="tel:09390789562">📞 09390789562</a>
+      <a href="https://instagram.com/hoorzadstudio" target="_blank">📷 hoorzadstudio</a>
+      <a href="https://wa.me/989390789562" target="_blank">💬 واتساپ</a>
+      <p>📍 خیابان بوعلی (سیزده‌خانه)، کوچه میخک، ساختمان نگار، طبقه سوم</p>
+    </div>
+  </section>
 
   <script>
-    fetch("data.json")
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('phone').innerHTML = `📞 شماره تماس: ${data.phone}`;
-        document.getElementById('instagram').innerHTML = `📷 <a href="${data.instagram}" style="color:#c8a257" target="_blank">صفحه اینستاگرام</a>`;
-        document.getElementById('whatsapp').innerHTML = `💬 <a href="${data.whatsapp}" style="color:#c8a257" target="_blank">گفتگو در واتساپ</a>`;
-        document.getElementById('address').innerHTML = `📍 آدرس: ${data.address}`;
-      });
+    function scrollToInfo() {
+      document.getElementById('info-section').scrollIntoView({ behavior: 'smooth' });
+    }
   </script>
-
 </body>
 </html>
