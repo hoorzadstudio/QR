@@ -15,7 +15,16 @@
       overflow-x: hidden;
     }
 
-    /* باکس خوش آمد */
+    /* افکت ذرات پس‌زمینه برای هر سکشن */
+    .particles-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      top: 0;
+      left: 0;
+    }
+
     #welcome-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -39,6 +48,7 @@
       cursor: pointer;
       transition: transform 0.3s ease;
       animation: scaleFade 1.5s ease-in-out;
+      z-index: 10;
     }
 
     #welcome-box:hover {
@@ -121,19 +131,14 @@
       z-index: 1;
     }
 
-    #particles-js {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    }
-
     #info-section {
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
       padding-top: 60px;
+      overflow: hidden;
     }
 
     #info-box {
@@ -147,6 +152,7 @@
       text-align: center;
       box-shadow: 0 0 25px rgba(200,162,87, 0.4);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 2;
     }
 
     #info-box:hover {
@@ -163,7 +169,7 @@
   </style>
 </head>
 <body>
-  <!-- پیام خوش‌آمد با استایل شیشه‌ای -->
+  <!-- پیام خوش‌آمد -->
   <div id="welcome-overlay">
     <div id="welcome-box" onclick="startExperience()">
       <h1>خوش آمدید به استودیو هورزاد 🌟</h1>
@@ -178,7 +184,7 @@
 
   <!-- صفحه لوگو -->
   <section class="parallax">
-    <div id="particles-js"></div>
+    <div class="particles-container" id="particles-logo"></div>
     <div class="halo"></div>
     <img src="logo.png" alt="لوگو هورزاد" class="logo" />
     <svg onclick="handleScrollClick()" class="scroll-icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#c8a257" viewBox="0 0 24 24">
@@ -188,6 +194,7 @@
 
   <!-- اطلاعات تماس -->
   <section id="info-section">
+    <div class="particles-container" id="particles-info"></div>
     <div id="info-box">
       <h2>ارتباط با هورزاد</h2>
       <a href="tel:09390789562">📞 09390789562</a>
@@ -200,39 +207,11 @@
   <!-- Particles.js -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    particlesJS("particles-js", {
-      "particles": {
-        "number": {
-          "value": 70
-        },
-        "color": {
-          "value": "#c8a257"
-        },
-        "shape": {
-          "type": "circle"
-        },
-        "opacity": {
-          "value": 0.5
-        },
-        "size": {
-          "value": 3
-        },
-        "line_linked": {
-          "enable": false
-        },
-        "move": {
-          "enable": true,
-          "speed": 1
-        }
-      },
-      "interactivity": {
-        "detect_on": "canvas",
-        "events": {
-          "onhover": { "enable": true, "mode": "repulse" }
-        }
-      },
-      "retina_detect": true
-    });
+    function startExperience() {
+      document.getElementById('welcome-overlay').style.display = 'none';
+      const music = document.getElementById('bg-music');
+      music.play().catch(err => console.log("موزیک پخش نشد:", err));
+    }
 
     function handleScrollClick() {
       const section = document.getElementById('info-section');
@@ -240,11 +219,27 @@
       window.scrollTo({ top: offset, behavior: 'smooth' });
     }
 
-    function startExperience() {
-      document.getElementById('welcome-overlay').style.display = 'none';
-      const music = document.getElementById('bg-music');
-      music.play().catch(err => console.log("موزیک پخش نشد:", err));
+    function initParticles(id) {
+      particlesJS(id, {
+        "particles": {
+          "number": { "value": 60 },
+          "color": { "value": "#c8a257" },
+          "shape": { "type": "circle" },
+          "opacity": { "value": 0.5 },
+          "size": { "value": 3 },
+          "line_linked": { "enable": false },
+          "move": { "enable": true, "speed": 1 }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": { "onhover": { "enable": true, "mode": "repulse" } }
+        },
+        "retina_detect": true
+      });
     }
+
+    initParticles('particles-logo');
+    initParticles('particles-info');
   </script>
 </body>
 </html>
